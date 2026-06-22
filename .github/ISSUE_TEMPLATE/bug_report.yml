@@ -1,0 +1,30 @@
+name: 🐞 Bug report
+description: 스킬, lint, CI 등에서 발견한 버그를 보고합니다
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 무엇이 잘못되었나요?
+      description: 어떤 스킬/스크립트에서, 어떤 증상이 나타나는지
+      placeholder: 예) readme-architect 의 prompt.ko.md 렌더 시 DEPLOY_URL 빈 값 처리가 안 됨
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 재현 단계
+      placeholder: |
+        1. ...
+        2. ...
+        3. 기대: ... / 실제: ...
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 환경 (모델/OS/Node 등)
+      placeholder: 예) Claude Opus 4 / Windows 11 / Node 24
+    validations:
+      required: false

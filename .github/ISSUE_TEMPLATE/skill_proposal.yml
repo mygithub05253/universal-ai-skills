@@ -1,0 +1,43 @@
+name: 🧩 Skill proposal
+description: 새로운 스킬 추가를 제안합니다
+title: "feat: "
+labels: ["skill", "proposal"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: 스킬 이름 / slug
+      placeholder: 예) PR & Commit Message Maker / pr-commit-maker
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: 카테고리
+      options: [core, docs, collab, agent, data, quality, artifact, spec, orchestrator]
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 어떤 문제를 해결하나요?
+      description: 언제 쓰는 스킬인지, 어떤 반복 작업을 줄여주는지
+    validations:
+      required: true
+  - type: textarea
+    id: io
+    attributes:
+      label: 입력 변수 / 출력 형식 (초안)
+      placeholder: |
+        변수: {{GIT_DIFF}}, {{CHANGE_TYPE}}
+        출력: Conventional Commit 메시지 + PR 본문
+    validations:
+      required: true
+  - type: checkboxes
+    id: depth
+    attributes:
+      label: 깊이 체크리스트 (CONTRIBUTING 참고)
+      options:
+        - label: SKILL.md 에 안티패턴/엣지케이스/검증 포인트 포함 예정
+        - label: examples 2개 이상(basic + edge) 제공 예정
+        - label: prompt.en.md / prompt.ko.md 모두 제공 예정
