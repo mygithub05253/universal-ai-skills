@@ -4,12 +4,9 @@ name: Skill Lint
 # 브랜치 보호 규칙에서 이 체크(lint)를 required 로 지정해 통과해야만 머지되게 한다.
 
 on:
+  # 모든 PR에서 실행 — 브랜치 보호의 required 체크가 항상 보고되도록 함
+  # (특정 path 만 필터링하면 docs-only PR에서 체크가 안 올라와 머지가 멈춤)
   pull_request:
-    paths:
-      - "skills/**"
-      - "schema/**"
-      - "scripts/**"
-      - "package.json"
   push:
     branches: [main]
 
