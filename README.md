@@ -6,7 +6,7 @@
 
 <p>
   <img alt="status" src="https://img.shields.io/badge/status-Phase%200-0f766e">
-  <img alt="skills" src="https://img.shields.io/badge/skills-2-14b8a6">
+  <img alt="skills" src="https://img.shields.io/badge/skills-3-14b8a6">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
 </p>
 
@@ -122,6 +122,7 @@ PR에서는 GitHub Actions가 `lint` + `pr-conventions`(제목·브랜치명)를
 |------|----------|------|------|
 | [AI Handoff Dashboard](skills/ai-handoff/) | core | md-only | 모델/세션 전환 시 프로젝트 상태를 표준 대시보드로 압축 |
 | [README Architect](skills/readme-architect/) | docs | md-only | 프로젝트 정보를 포트폴리오 수준 README.md 로 생성 |
+| [PR & Commit Message Maker](skills/pr-commit-maker/) | collab | md-only | git diff → Conventional Commit · PR 본문 · 브랜치명 생성 |
 
 ---
 

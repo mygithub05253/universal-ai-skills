@@ -43,17 +43,20 @@
 | Final Artifact Builder | final-artifact | ⬜ | MVP 필수 |
 
 ## 🔧 인프라 상태 (확정)
-- main 브랜치 보호: `lint` 체크 required + strict(최신화 필수) ✅
+- main 브랜치 보호: required 체크 **3종** `lint` · `pr-title` · `branch-name` + strict(최신화 필수) ✅
 - auto-merge(squash) 활성화 ✅ → PR이 CI 통과 시 자동 머지됨
-- main 직접 push 차단됨 → 모든 변경은 feat/chore 브랜치 → PR → auto-merge
-- CI: `.github/workflows/skill-lint.yml` (PR/푸시 시 `npm run lint:skills`)
+- main 직접 push 차단됨 → 모든 변경은 브랜치 → PR → auto-merge
+- CI: `skill-lint.yml`(구조 검증) + `pr-conventions.yml`(PR 제목 영문 Conventional Commits + 브랜치명)
+- 거버넌스 문서: `CONTRIBUTING.md`(브랜치/커밋/PR 규칙 + 스킬 깊이 체크리스트), PR/Issue 템플릿, CODEOWNERS
+- 브랜치 타입: feat fix docs chore ci refactor test style perf build revert (+ 브랜치전용 hotfix release experiment)
 
 ---
 
 ## 🔜 다음 액션 (이어서 할 일)
-1. **(A) 거버넌스** — CONTRIBUTING + PR/Issue 템플릿 + CODEOWNERS + pr-conventions CI. ← 진행 중 (chore/governance)
-   - 머지 후: `pr-conventions` 의 `pr-title`/`branch-name` 체크를 브랜치 보호 required 에 추가.
-2. **(B) pr-commit-maker 스킬** — git diff → 영문 Conventional Commit + PR 본문. 깊이 체크리스트 충족.
+1. ✅ (A) 거버넌스 — 완료 (PR #3, required 체크 3종 적용)
+2. **(B) pr-commit-maker 스킬** ← 다음, **설계 대화부터**. git diff → 영문 Conventional Commit + PR 본문.
+   - 깊이 체크리스트 충족 필수 (examples 2개+, 안티패턴/엣지케이스, en/ko)
+   - 작업 브랜치: `feat/pr-commit-maker`
 3. Requirements & Spec Writer 스킬 (MVP 3호) — 깊이 체크리스트 충족.
 4. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
 5. (Phase 2) 나머지 스킬 + 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
