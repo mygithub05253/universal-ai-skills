@@ -4,6 +4,14 @@
   "private": true,
   "type": "module",
   "description": "프롬프트를 코드처럼 관리하는 AI Skill 생태계 (PromptOps blueprint)",
+  "bin": {
+    "uas": "bin/uas.mjs"
+  },
+  "files": [
+    "bin/",
+    "skills/",
+    "schema/"
+  ],
   "scripts": {
     "lint:skills": "node scripts/lint-skills.mjs",
     "test": "npm run lint:skills"

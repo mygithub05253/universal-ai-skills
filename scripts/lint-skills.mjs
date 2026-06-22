@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-// 스킬 패키지 표준 검증 스크립트
+// 스킬 패키지 표준 검증 스크립트 (네이티브 스킬 포맷)
 // - metadata.json 을 JSON Schema 로 검증
-// - 폴더명/slug 일치, i18n 프롬프트 파일 존재, SKILL.md 존재 확인
-// - 프롬프트 본문의 {{VARIABLE}} 와 metadata.variables 정합성 검사
+// - SKILL.md 존재 + frontmatter(name, description) 검증  ← 네이티브 실행 정본
+// - i18n 매핑: en → SKILL.md(영문 정본), ko → prompt.ko.md, 기타 → prompt.<lang>.md
+// - 지시문의 {{VARIABLE}} 와 metadata.variables 정합성 검사
 // 하나라도 오류가 있으면 비정상 종료(exit 1) → CI 게이트 역할
 
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
@@ -20,15 +21,10 @@ const VARIABLE_REGEX = /{{\s*([A-Z0-9_]+)\s*}}/g;
 
 const errors = [];
 const warnings = [];
+const err = (slug, msg) => errors.push(`  ✗ [${slug}] ${msg}`);
+const warn = (slug, msg) => warnings.push(`  ⚠ [${slug}] ${msg}`);
 
-function err(slug, msg) {
-  errors.push(`  ✗ [${slug}] ${msg}`);
-}
-function warn(slug, msg) {
-  warnings.push(`  ⚠ [${slug}] ${msg}`);
-}
-
-// 프롬프트 파일에서 사용된 변수 집합 추출
+// 프롬프트/지시문에서 사용된 변수 집합 추출
 function extractVars(text) {
   const set = new Set();
   let m;
@@ -36,7 +32,25 @@ function extractVars(text) {
   return set;
 }
 
-// AJV 준비
+// SKILL.md frontmatter(맨 앞 --- 블록)에서 키 존재 여부를 가볍게 확인
+function parseFrontmatter(rawText) {
+  const text = rawText.replace(/\r\n/g, "\n"); // CRLF 정규화
+  const match = text.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!match) return null;
+  const fm = {};
+  for (const line of match[1].split("\n")) {
+    const kv = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (kv) fm[kv[1]] = kv[2].trim();
+  }
+  return fm;
+}
+
+// i18n 언어 코드 → 지시문 파일 경로 매핑
+function promptFileFor(lang) {
+  if (lang === "en") return "SKILL.md"; // 영문 정본은 SKILL.md 자체
+  return `prompt.${lang}.md`;
+}
+
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
 const schema = JSON.parse(readFileSync(SCHEMA_PATH, "utf8"));
@@ -50,7 +64,6 @@ if (!existsSync(SKILLS_DIR)) {
 const skillDirs = readdirSync(SKILLS_DIR).filter((name) =>
   statSync(join(SKILLS_DIR, name)).isDirectory()
 );
-
 if (skillDirs.length === 0) {
   console.error("검증할 스킬이 없습니다.");
   process.exit(1);
@@ -87,37 +100,48 @@ for (const slug of skillDirs) {
     err(slug, `slug(${meta.slug}) 가 폴더명(${slug})과 다릅니다.`);
   }
 
-  // 4) SKILL.md 존재
-  if (!existsSync(join(dir, "SKILL.md"))) {
+  // 4) SKILL.md 존재 + frontmatter(name, description) 검증
+  const skillPath = join(dir, "SKILL.md");
+  if (!existsSync(skillPath)) {
     err(slug, "SKILL.md 가 없습니다.");
+  } else {
+    const fm = parseFrontmatter(readFileSync(skillPath, "utf8"));
+    if (!fm) {
+      err(slug, "SKILL.md 에 YAML frontmatter(--- 블록)가 없습니다.");
+    } else {
+      if (!fm.name) err(slug, "SKILL.md frontmatter 에 name 이 없습니다.");
+      if (!fm.description) err(slug, "SKILL.md frontmatter 에 description 이 없습니다.");
+    }
   }
 
-  // 5) i18n 프롬프트 파일 존재 + 변수 정합성
+  // 5) i18n 지시문 파일 존재 + 변수 정합성
   const declaredVars = new Set((meta.variables || []).map((v) => v.name));
   for (const lang of meta.i18n || []) {
-    const promptPath = join(dir, `prompt.${lang}.md`);
+    const rel = promptFileFor(lang);
+    const promptPath = join(dir, rel);
     if (!existsSync(promptPath)) {
-      err(slug, `i18n=${lang} 인데 prompt.${lang}.md 가 없습니다.`);
+      err(slug, `i18n=${lang} 인데 ${rel} 가 없습니다.`);
       continue;
     }
     const usedVars = extractVars(readFileSync(promptPath, "utf8"));
-    // 프롬프트에서 쓰였지만 metadata 에 선언 안 된 변수 → 오류
     for (const v of usedVars) {
       if (!declaredVars.has(v)) {
-        err(slug, `prompt.${lang}.md 의 {{${v}}} 가 metadata.variables 에 없습니다.`);
+        err(slug, `${rel} 의 {{${v}}} 가 metadata.variables 에 없습니다.`);
       }
     }
-    // metadata 에 선언했지만 어느 프롬프트에서도 안 쓰인 변수 → 경고
     for (const v of declaredVars) {
       if (!usedVars.has(v)) {
-        warn(slug, `변수 {{${v}}} 가 prompt.${lang}.md 에서 사용되지 않습니다.`);
+        warn(slug, `변수 {{${v}}} 가 ${rel} 에서 사용되지 않습니다.`);
       }
     }
   }
 
-  // 6) examples 디렉터리 권장
+  // 6) 권장 파일
   if (!existsSync(join(dir, "examples"))) {
     warn(slug, "examples/ 디렉터리가 없습니다 (권장).");
+  }
+  if (!existsSync(join(dir, "README.md"))) {
+    warn(slug, "폴더 README.md 가 없습니다 (권장).");
   }
 
   if (!errors.some((line) => line.includes(`[${slug}]`))) {
@@ -137,5 +161,4 @@ if (errors.length) {
   console.log(`\n❌ 검증 실패: 오류 ${errors.length}건\n`);
   process.exit(1);
 }
-
 console.log(`✅ 모든 스킬 검증 통과 (경고 ${warnings.length}건)\n`);

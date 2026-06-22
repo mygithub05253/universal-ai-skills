@@ -52,14 +52,24 @@
 
 ---
 
+## 🧬 스킬 포맷 표준 (피벗 확정)
+- **SKILL.md = 네이티브 실행 정본**(영문): frontmatter(name/description/argument-hint) + 지시문. agentskills.io 표준 → Claude Code 설치 시 `/명령어`.
+- **prompt.ko.md** = 한국어 복붙 변형. **prompt.en.md 폐지**(SKILL.md가 겸함).
+- 모든 지시문은 `{{VARIABLE}}` 기반 → 모든 생성형 AI 복붙 호환. Claude 전용 기능은 `⚡ Claude Code only` 블록에 분리.
+- 폴더별 `README.md` 필수(사람용). 설치 CLI: `node bin/uas.mjs add <slug> [--global|--project|--codex|--dir]`.
+
 ## 🔜 다음 액션 (이어서 할 일)
-1. ✅ (A) 거버넌스 — 완료 (PR #3, required 체크 3종 적용)
-2. **(B) pr-commit-maker 스킬** ← 다음, **설계 대화부터**. git diff → 영문 Conventional Commit + PR 본문.
-   - 깊이 체크리스트 충족 필수 (examples 2개+, 안티패턴/엣지케이스, en/ko)
-   - 작업 브랜치: `feat/pr-commit-maker`
-3. Requirements & Spec Writer 스킬 (MVP 3호) — 깊이 체크리스트 충족.
-4. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
-5. (Phase 2) 나머지 스킬 + 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+1. ✅ (A) 거버넌스 — 완료 (PR #3)
+2. ✅ (B) pr-commit-maker 스킬 — 완료 (PR #4)
+3. ✅ 네이티브 스킬 포맷 피벗 + 설치 CLI — 진행 중 (refactor/native-skill-format)
+4. Requirements & Spec Writer 스킬 (MVP 3호) — **새 네이티브 포맷**으로, 설계 대화부터.
+5. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
+6. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+
+## 🗂️ 스킬 백로그 (아이디어)
+- `folder-docs` — 각 스킬/폴더의 README.md 자동 생성
+- `readme-illustrator` — 각 생성형 AI의 이미지 생성(GPT Image, Claude 등)으로 README 썸네일/배너 추가
+- HTML 청사진의 나머지 스킬들 (AGENTS.md Generator, Dacon Pipeline, ERD Generator, Skill Chain Orchestrator 등)
 
 ## 🐞 이슈 / 개선 로그 (체감 테스트 중 발견)
-- (아직 없음 — 실제 모델로 프롬프트 돌려보며 누적 예정)
+- lint 파서가 CRLF 줄바꿈에서 frontmatter name/description 을 못 읽던 버그 → CRLF 정규화 + `.gitattributes`(LF 강제)로 해결.
