@@ -1,5 +1,5 @@
 ---
-name: AI Handoff Dashboard
+name: ai-handoff
 description: Compress current project state into a standard handoff dashboard so another AI or a fresh session can continue immediately. Use when hitting a usage limit, when the chat got too long, or when handing work to another AI/teammate.
 argument-hint: [project-goal]
 ---

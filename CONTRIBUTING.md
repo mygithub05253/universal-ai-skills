@@ -72,6 +72,7 @@ A skill is **not** "a single prompt in a file". To avoid shallow skills, every n
 
 - [ ] `metadata.json` valid against [`schema/skill-metadata.schema.json`](schema/skill-metadata.schema.json)
 - [ ] `SKILL.md` = **네이티브 실행 정본**: frontmatter(`name`, `description`, 선택 `argument-hint`) + 영문 지시문. 지시문에 **출력 규칙 / 금지사항 / 입력 부족 시 fallback** 포함, 필요 시 `⚡ Claude Code only` 블록 분리
+  - ⚠️ **`name` 은 반드시 폴더 slug 와 동일한 케밥케이스** (`ai-handoff`, `pr-commit-maker`). 공백/대문자 제목(`AI Handoff Dashboard`)을 넣으면 Claude Code 가 `/명령어` 이름을 제대로 등록하지 못합니다. **사람용 제목은 `metadata.json` 의 `name`** 에만 둡니다. (lint 가 강제)
 - [ ] `prompt.ko.md` (한국어 복붙 변형). 영문 정본은 `SKILL.md` 가 겸함 (별도 `prompt.en.md` 두지 않음)
 - [ ] `README.md` (폴더용 사람 설명: 언제 쓰나 / 입력 / 안티패턴 / 검증 포인트 / 사용법)
 - [ ] `examples/` with **at least 2 scenarios** (e.g. `basic.*` and `edge.*`) as input/output pairs

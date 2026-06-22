@@ -83,5 +83,7 @@
 ## 🐞 이슈 / 개선 로그 (체감 테스트 중 발견)
 - lint 파서가 CRLF 줄바꿈에서 frontmatter name/description 을 못 읽던 버그 → CRLF 정규화 + `.gitattributes`(LF 강제)로 해결.
 - 슬래시 명령은 **폴더 slug** = `/ai-handoff` (표시명 `AI Handoff Dashboard` 아님). 새 스킬은 설치 후 **Claude Code 재시작** 시 팔레트에 등록됨. README에 명시.
+- **(추가 발견) `SKILL.md` frontmatter `name` 도 폴더 slug 케밥케이스여야 함.** 표시명(`AI Handoff Dashboard`)을 넣었더니 Claude Code 가 이름을 제대로 등록/표시하지 못함 → `name: ai-handoff` 처럼 교정. 사람용 제목은 `metadata.json` name 에만 유지. lint 에 `name===slug` 규칙 추가로 회귀 차단. (재발 시 설치 후 재시작 + 재설치 필요)
+- pr-commit-maker·readme-architect 가 `~/.claude/skills/` 에 **설치 안 돼 있었음** (ai-handoff 만 설치됨) → 셋 다 재설치 + 재시작 필요.
 - SKILL.md frontmatter 는 표준 필드만(name/description/argument-hint). version/risk 는 metadata.json 으로 이동(엄격 파서 호환).
 - `.claude/`, `.serena/` 등 에이전트 로컬 설정이 git add -A 에 딸려오므로 .gitignore 에 등록함. 새 도구 쓰면 점검.

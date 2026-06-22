@@ -1,5 +1,5 @@
 ---
-name: PR & Commit Message Maker
+name: pr-commit-maker
 description: Turn a git diff into a Conventional Commit message, a PR body, and a branch name. Use when committing changes, opening a pull request, or enforcing Conventional Commits.
 argument-hint: [change-type]
 ---
