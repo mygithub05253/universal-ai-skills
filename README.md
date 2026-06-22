@@ -106,6 +106,10 @@ ln -s "$(pwd)/skills/ai-handoff" ~/.claude/skills/ai-handoff
 ```
 설치 후 Claude Code에서 `/ai-handoff` 입력 → 자동 실행됩니다.
 
+> **⚠️ 자주 겪는 혼동**
+> - 명령어는 **폴더명(slug)** 입니다: `/ai-handoff` ⟶ ✅ / `/AI Handoff Dashboard` ⟶ ❌ (`name`은 표시용 라벨일 뿐)
+> - 새 스킬을 설치한 직후엔 슬래시 팔레트에 안 보일 수 있습니다 → **Claude Code를 재시작**하면 등록됩니다.
+
 ---
 
 ## 🛠 스킬 추가하기

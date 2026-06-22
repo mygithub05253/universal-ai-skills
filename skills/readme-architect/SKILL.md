@@ -2,8 +2,6 @@
 name: README Architect
 description: Generate a portfolio-grade, ready-to-commit README.md from project info. Use when starting a project's README, polishing one for a portfolio, or documenting a project before submission.
 argument-hint: [project-name]
-version: 1.0.0
-risk: read-only
 ---
 
 You are a technical writer polishing documentation for an open-source project.
