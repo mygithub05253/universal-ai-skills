@@ -17,8 +17,27 @@ docs/readme-badges
 chore/governance
 ```
 
-Allowed prefixes: `feat` `fix` `docs` `chore` `ci` `refactor` `test`.
-> 한국어: 브랜치는 `타입/짧은-설명` 형식. 위 7개 타입만 허용합니다. CI가 자동 검사합니다.
+Allowed prefixes:
+
+| prefix | 용도 |
+|--------|------|
+| `feat` | 새 기능/스킬 |
+| `fix` | 버그 수정 |
+| `docs` | 문서만 변경 |
+| `chore` | 잡일(설정, 의존성, 정리) |
+| `ci` | CI/워크플로우 변경 |
+| `refactor` | 동작 변화 없는 구조 개선 |
+| `test` | 테스트 추가/수정 |
+| `style` | 포맷·세미콜론 등(로직 변화 없음) |
+| `perf` | 성능 개선 |
+| `build` | 빌드 시스템·패키징 |
+| `revert` | 이전 커밋 되돌리기 |
+| `hotfix` | 운영 긴급 수정 (브랜치 전용) |
+| `release` | 릴리스 준비 (브랜치 전용) |
+| `experiment` | 실험/스파이크 (브랜치 전용) |
+
+> 한국어: 브랜치는 `타입/짧은-설명` 형식. 위 타입만 허용하며 CI가 자동 검사합니다.
+> `hotfix`·`release`·`experiment`는 브랜치명 전용이고, 커밋/PR 제목 타입은 그 위의 Conventional Commits 타입을 씁니다.
 
 ## 2. Commits & PR titles — Conventional Commits (English)
 
@@ -30,7 +49,7 @@ fix: handle optional variables in lint
 docs: add contributing guide
 ```
 
-Types: `feat` `fix` `docs` `chore` `ci` `refactor` `test` `style`.
+Commit/PR title types: `feat` `fix` `docs` `chore` `ci` `refactor` `test` `style` `perf` `build` `revert`.
 
 > 한국어: **커밋/PR 제목은 영문 Conventional Commits**로 통일합니다(국제 표준 → star·fork·외부 기여에 유리).
 > 단, **PR 본문·이슈·코드 주석·내부 문서(PROGRESS 등)는 한국어**로 작성해도 됩니다.

@@ -29,6 +29,9 @@ jobs:
             refactor
             test
             style
+            perf
+            build
+            revert
           requireScope: false
           subjectPattern: ^.+$
 
@@ -40,9 +43,10 @@ jobs:
         run: |
           name="${{ github.head_ref }}"
           echo "브랜치명: $name"
-          if echo "$name" | grep -qE '^(feat|fix|docs|chore|ci|refactor|test)/[a-z0-9._-]+$'; then
+          if echo "$name" | grep -qE '^(feat|fix|docs|chore|ci|refactor|test|style|perf|build|revert|hotfix|release|experiment)/[a-z0-9._-]+$'; then
             echo "✅ 브랜치명 규칙 통과"
           else
-            echo "❌ 브랜치명은 'type/short-desc' 형식이어야 합니다 (type: feat|fix|docs|chore|ci|refactor|test)"
+            echo "❌ 브랜치명은 'type/short-desc' 형식이어야 합니다"
+            echo "   허용 타입: feat fix docs chore ci refactor test style perf build revert hotfix release experiment"
             exit 1
           fi
