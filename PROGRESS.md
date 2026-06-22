@@ -61,10 +61,19 @@
 ## 🔜 다음 액션 (이어서 할 일)
 1. ✅ (A) 거버넌스 — 완료 (PR #3)
 2. ✅ (B) pr-commit-maker 스킬 — 완료 (PR #4)
-3. ✅ 네이티브 스킬 포맷 피벗 + 설치 CLI — 진행 중 (refactor/native-skill-format)
-4. Requirements & Spec Writer 스킬 (MVP 3호) — **새 네이티브 포맷**으로, 설계 대화부터.
+3. ✅ 네이티브 스킬 포맷 피벗 + 설치 CLI — 완료 (PR #5)
+4. **▶ 다음 세션 시작점: Requirements & Spec Writer 스킬 (MVP 3호)** — **새 네이티브 포맷**으로, **설계 대화부터** 시작.
+   - 성격: Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안을 PR 단위로 계속 갱신)
+   - 논의할 점: 변수 구조(STAKEHOLDERS/USER_STORIES/FEATURE_LIST/CONSTRAINTS 등), 출력 분할(여러 문서?), 갱신 모드, examples 2종(신규/변경)
+   - 작업 방식: 하나씩, 설계 대화 → 빌드 → PR → 보여주고 피드백
 5. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
 6. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+
+## 🧭 새 세션 빠른 복구 가이드
+1. 이 PROGRESS.md 를 먼저 읽는다.
+2. `git log --oneline -8` 로 머지 상태 확인 (현재 PR #1~#5 머지됨, MVP 2.5/4 + pr-commit-maker).
+3. 스킬 추가는 CONTRIBUTING "깊이 체크리스트" 충족 → 브랜치 → PR → auto-merge.
+4. 모든 변경은 PR 플로우(main 직접 push 차단). 커밋/PR 제목은 영문 Conventional Commits.
 
 ## 🗂️ 스킬 백로그 (아이디어)
 - `folder-docs` — 각 스킬/폴더의 README.md 자동 생성
@@ -73,3 +82,6 @@
 
 ## 🐞 이슈 / 개선 로그 (체감 테스트 중 발견)
 - lint 파서가 CRLF 줄바꿈에서 frontmatter name/description 을 못 읽던 버그 → CRLF 정규화 + `.gitattributes`(LF 강제)로 해결.
+- 슬래시 명령은 **폴더 slug** = `/ai-handoff` (표시명 `AI Handoff Dashboard` 아님). 새 스킬은 설치 후 **Claude Code 재시작** 시 팔레트에 등록됨. README에 명시.
+- SKILL.md frontmatter 는 표준 필드만(name/description/argument-hint). version/risk 는 metadata.json 으로 이동(엄격 파서 호환).
+- `.claude/`, `.serena/` 등 에이전트 로컬 설정이 git add -A 에 딸려오므로 .gitignore 에 등록함. 새 도구 쓰면 점검.
