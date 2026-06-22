@@ -1,42 +1,59 @@
 ---
-name: readme-architect
-description: 프로젝트 정보를 포트폴리오 수준의 구조화된 README.md 로 생성한다
-version: 1.0.0
-risk: read-only
+name: README Architect
+description: Generate a portfolio-grade, ready-to-commit README.md from project info. Use when starting a project's README, polishing one for a portfolio, or documenting a project before submission.
+argument-hint: [project-name]
 ---
 
-# README Architect
+You are a technical writer polishing documentation for an open-source project.
+Using the inputs below, write a **portfolio-grade README.md that is ready to commit as-is**.
 
-## 언제 쓰나
-- GitHub 프로젝트에 처음 README 를 작성할 때
-- 포트폴리오/취업용으로 기존 README 를 다듬을 때
-- 과제·공모전 제출 전 프로젝트 문서를 정리할 때
+## Inputs
+Fill these variables (copy-paste tools) or pass them as arguments (Claude Code):
+- Project name: {{PROJECT_NAME}}
+- Tech stack: {{TECH_STACK}}
+- Key features: {{FEATURES}}
+- Deploy URL: {{DEPLOY_URL}}
 
-## 동작 방식
-1. 사용자가 `{{PROJECT_NAME}}`, `{{TECH_STACK}}`, `{{FEATURES}}`, (선택) `{{DEPLOY_URL}}` 을 채운다.
-2. 모델은 **고정된 README 섹션 구조**로 출력한다.
-3. 배지·목차·실행법·트러블슈팅까지 포함해 "그대로 커밋 가능한" README 를 만든다.
+## Output rules
+- Output pure Markdown only. Do not wrap the whole thing in a code fence.
+- Do not exaggerate; state only the given facts. For unknowns, leave `<!-- TODO -->` instead of guessing.
+- Make run commands specific to the given stack (e.g. `npm run dev` for Next.js).
+- If the deploy URL is empty, omit the demo link section.
 
-## 입력 변수
-| 변수 | 필수 | 설명 |
-|------|------|------|
-| `{{PROJECT_NAME}}` | ✅ | 프로젝트 이름 |
-| `{{TECH_STACK}}` | ✅ | 기술 스택 |
-| `{{FEATURES}}` | ✅ | 핵심 기능 |
-| `{{DEPLOY_URL}}` | ⬜ | 배포 URL |
+## Output format
+# {{PROJECT_NAME}}
 
-## 출력 형식
-1. 제목 + 한 줄 소개 + (있으면) 데모 링크
-2. 주요 기능 (불릿)
-3. 기술 스택 (배지 또는 표)
-4. 시작하기 (설치/실행 명령)
-5. 프로젝트 구조 (간단한 트리)
-6. 트러블슈팅 / 회고 (1~2개)
+> (one-line description)
 
-## 검증 포인트 (체감 테스트 기준)
-- 실행 명령이 추측이 아닌 스택에 맞게 구체적인가
-- 과장 없이 기능을 사실대로 기술하는가
-- 그대로 `README.md` 로 커밋 가능한 완결성인가
+(if deploy URL exists) **🔗 Live Demo: {{DEPLOY_URL}}**
 
-## 예시
-`examples/basic.input.md` → `examples/basic.output.md` 참고.
+## ✨ Features
+- (key features, framed around user value)
+
+## 🛠 Tech Stack
+(stack as a table or badge list)
+
+## 🚀 Getting Started
+```bash
+(install and run commands)
+```
+
+## 📁 Project Structure
+```
+(brief directory tree)
+```
+
+## 🧩 Troubleshooting / Notes
+- (a likely problem and its fix, or 1-2 lessons learned)
+
+## ⚡ Claude Code only (optional)
+You can ground the README in the real repo instead of relying on inputs:
+- ``!`cat package.json` `` → infer tech stack and scripts
+- ``!`git ls-files | head -40` `` → infer project structure
+
+Other AI tools: ignore this section and fill the variables above.
+
+## References
+- Example: `examples/basic.input.md` → `examples/basic.output.md`
+- Korean copy-paste version: `prompt.ko.md`
+- Human-facing overview: `README.md`

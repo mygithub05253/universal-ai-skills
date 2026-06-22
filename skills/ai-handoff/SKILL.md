@@ -1,43 +1,51 @@
 ---
-name: ai-handoff
-description: 다른 AI 모델/세션으로 작업을 넘길 때 프로젝트 상태를 표준 대시보드로 압축한다
-version: 1.0.0
-risk: read-only
+name: AI Handoff Dashboard
+description: Compress current project state into a standard handoff dashboard so another AI or a fresh session can continue immediately. Use when hitting a usage limit, when the chat got too long, or when handing work to another AI/teammate.
+argument-hint: [project-goal]
 ---
 
-# AI Handoff Dashboard
+You are a senior engineer taking over an in-progress project.
+Produce a **handoff dashboard** so another AI or a fresh session can continue the work immediately.
 
-## 언제 쓰나
-- Claude 사용량 한도에 걸려 ChatGPT/Gemini로 갈아탈 때
-- 대화가 너무 길어져 새 세션을 시작할 때
-- 동료/다른 에이전트에게 작업을 인계할 때
+## Inputs
+Fill these variables (copy-paste tools) or pass them as arguments (Claude Code):
+- Project goal: {{PROJECT_GOAL}}
+- Current error/symptom: {{CURRENT_ERROR_LOG}}
+- Completed work: {{DONE_ITEMS}}
+- Remaining work: {{NEXT_TASKS}}
 
-위 상황에서 가장 즉시 체감되는 "문맥 단절"을 막는 것이 이 스킬의 목적이다.
+## Output rules
+- Output ONLY the four sections below. No greetings or filler.
+- Mark anything you had to infer with "(assumption)".
+- In "Next Actions", number items by priority; each shows "what / why".
+- If the inputs are empty, ask for them in one line instead of guessing.
 
-## 동작 방식 (Progressive Disclosure)
-1. 사용자는 `prompt.ko.md` 또는 `prompt.en.md` 의 `{{ }}` 변수를 채운다.
-2. 모델은 **고정된 4개 섹션**(현재 상태 / 리스크·블로커 / 다음 액션 / 복붙용 프롬프트)으로만 출력한다.
-3. 출력의 마지막 "복붙용 프롬프트"는 다음 AI에게 그대로 붙여넣어 작업을 이어갈 수 있는 형태여야 한다.
+## Output format
+# 🔄 Handoff Dashboard
 
-## 입력 변수
-| 변수 | 필수 | 설명 |
-|------|------|------|
-| `{{PROJECT_GOAL}}` | ✅ | 프로젝트 목표 |
-| `{{CURRENT_ERROR_LOG}}` | ⬜ | 현재 막힌 에러/증상 |
-| `{{DONE_ITEMS}}` | ✅ | 완료된 작업 |
-| `{{NEXT_TASKS}}` | ✅ | 남은 작업 |
+## 1. Current State
+- (3-5 bullets on where things stand)
 
-## 출력 형식
-항상 아래 4개 섹션의 Markdown 대시보드:
-1. **Current State** — 한눈에 보는 현재 상태
-2. **Risk & Blockers** — 막힌 지점과 리스크
-3. **Next Actions** — 우선순위가 매겨진 다음 행동
-4. **Copy-ready Prompt** — 다음 AI에 붙여넣을 프롬프트
+## 2. Risk & Blockers
+- (What is blocked and the risks. If an error log exists, add a root-cause hypothesis.)
 
-## 검증 포인트 (체감 테스트 기준)
-- 4개 섹션이 모두 존재하는가
-- 다음 액션이 "무엇을/왜" 수준으로 구체적인가
-- Copy-ready Prompt 만으로 다음 세션이 맥락을 복원할 수 있는가
+## 3. Next Actions
+1. (First thing to do — what / why)
+2. ...
 
-## 예시
-`examples/basic.input.md` → `examples/basic.output.md` 참고.
+## 4. Copy-ready Prompt
+```
+(A prompt to paste into the next AI that restores context: goal, done, remaining, immediate next step.)
+```
+
+## ⚡ Claude Code only (optional)
+On Claude Code you can auto-fill context instead of pasting it. For example, inject recent history with a dynamic command line in your own copy:
+- ``!`git log --oneline -10` `` → recent commits
+- ``!`git status -s` `` → working tree state
+
+Other AI tools: ignore this section and fill the variables above.
+
+## References
+- Example: `examples/basic.input.md` → `examples/basic.output.md`
+- Korean copy-paste version: `prompt.ko.md`
+- Human-facing overview: `README.md`

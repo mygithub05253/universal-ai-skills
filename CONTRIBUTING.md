@@ -71,14 +71,16 @@ The PR title is validated by CI ([`pr-conventions.yml`](.github/workflows/pr-con
 A skill is **not** "a single prompt in a file". To avoid shallow skills, every new skill under `skills/<slug>/` must satisfy:
 
 - [ ] `metadata.json` valid against [`schema/skill-metadata.schema.json`](schema/skill-metadata.schema.json)
-- [ ] `SKILL.md` includes: **언제 쓰나 / 동작 방식 / 입력 변수 / 출력 형식 / 안티패턴(하지 말 것) / 엣지 케이스 / 검증 포인트**
-- [ ] `prompt.en.md` **and** `prompt.ko.md`, with output rules + forbidden actions + a fallback when input is missing
+- [ ] `SKILL.md` = **네이티브 실행 정본**: frontmatter(`name`, `description`, 선택 `argument-hint`) + 영문 지시문. 지시문에 **출력 규칙 / 금지사항 / 입력 부족 시 fallback** 포함, 필요 시 `⚡ Claude Code only` 블록 분리
+- [ ] `prompt.ko.md` (한국어 복붙 변형). 영문 정본은 `SKILL.md` 가 겸함 (별도 `prompt.en.md` 두지 않음)
+- [ ] `README.md` (폴더용 사람 설명: 언제 쓰나 / 입력 / 안티패턴 / 검증 포인트 / 사용법)
 - [ ] `examples/` with **at least 2 scenarios** (e.g. `basic.*` and `edge.*`) as input/output pairs
 - [ ] (recommended) `reference/` for detailed knowledge kept out of `SKILL.md` (Progressive Disclosure)
-- [ ] Every `{{VARIABLE}}` used in prompts is declared in `metadata.variables`, and vice versa
+- [ ] `{{VARIABLE}}` 는 모든 지시문(SKILL.md·prompt.ko.md)과 `metadata.variables` 가 서로 일치
 - [ ] `risk` label set honestly (`read-only` / `code-generation` / `file-write` / `network` / `credential-sensitive`)
 
-> 한국어: 위 체크리스트를 통과하지 못하면 "얇은 스킬"로 간주합니다. lint가 구조 일부를 자동 검사하고, 나머지는 PR 리뷰에서 확인합니다.
+> 한국어: 모든 지시문은 `{{VARIABLE}}` 플레이스홀더 기반이라 어떤 생성형 AI에도 복붙됩니다. 동시에 `SKILL.md` 는 agentskills.io 표준을 따라 Claude Code 에 설치하면 `/명령어` 로 동작합니다.
+> 위 체크리스트를 통과하지 못하면 "얇은 스킬"로 간주합니다. lint 가 구조를 자동 검사하고, 나머지는 PR 리뷰에서 확인합니다.
 
 ## 5. Local commands
 
