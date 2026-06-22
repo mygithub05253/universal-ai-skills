@@ -1,0 +1,45 @@
+{
+  "name": "README Architect",
+  "slug": "readme-architect",
+  "version": "1.0.0",
+  "status": "stable",
+  "category": "docs",
+  "summary": "프로젝트 정보를 받아 포트폴리오 수준의 구조화된 README.md 를 생성합니다.",
+  "variables": [
+    {
+      "name": "PROJECT_NAME",
+      "required": true,
+      "description": "프로젝트 이름",
+      "example": "회의실 예약 웹앱 Roomly"
+    },
+    {
+      "name": "TECH_STACK",
+      "required": true,
+      "description": "사용 기술 스택",
+      "example": "Next.js 15, TypeScript, Prisma, PostgreSQL, Tailwind"
+    },
+    {
+      "name": "FEATURES",
+      "required": true,
+      "description": "핵심 기능 목록",
+      "example": "카카오 로그인, 회의실 예약/취소, 중복 예약 방지, 메일 알림"
+    },
+    {
+      "name": "DEPLOY_URL",
+      "required": false,
+      "description": "배포 URL (있으면 데모 링크로 노출)",
+      "example": "https://roomly.vercel.app"
+    }
+  ],
+  "i18n": ["en", "ko"],
+  "compatibility": {
+    "claude-opus-4": "excellent",
+    "gpt-4o": "untested",
+    "gemini-1-5-pro": "untested"
+  },
+  "risk": "read-only",
+  "tags": ["readme", "docs", "portfolio"],
+  "quality": {
+    "last_eval": "2026-06-22"
+  }
+}
