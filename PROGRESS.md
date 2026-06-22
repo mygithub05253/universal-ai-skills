@@ -26,25 +26,31 @@
 
 | Phase | 내용 | 상태 |
 |-------|------|------|
-| 0 | 표준/스키마/lint/CI 세로 슬라이스 | 🟡 진행 중 |
-| 1 | MVP 필수 4종 스킬 완성 | ⬜ 대기 |
+| 0 | 표준/스키마/lint/CI 세로 슬라이스 | 🟢 완료 |
+| 1 | MVP 필수 4종 스킬 완성 | 🟡 진행 중 (2/4) |
 | 2 | 나머지 스킬 + 카탈로그 데이터화 | ⬜ 대기 |
 | 3 | Next.js 카탈로그 배포 | ⬜ 대기 |
 
 ## 📦 스킬 제작 현황
 | 스킬 | slug | 상태 | 비고 |
 |------|------|------|------|
-| AI Handoff Dashboard | ai-handoff | 🟢 완료 | 세로 슬라이스 1호 |
-| README Architect | readme-architect | ⬜ | MVP 필수 |
-| Requirements & Spec Writer | requirements-spec | ⬜ | MVP 필수 |
+| AI Handoff Dashboard | ai-handoff | 🟢 완료 | 세로 슬라이스 1호 (부트스트랩) |
+| README Architect | readme-architect | 🟢 완료 | PR #1, 보호 플로우 검증 완료 |
+| Requirements & Spec Writer | requirements-spec | ⬜ | MVP 필수, 다음 차례 |
 | Final Artifact Builder | final-artifact | ⬜ | MVP 필수 |
+
+## 🔧 인프라 상태 (확정)
+- main 브랜치 보호: `lint` 체크 required + strict(최신화 필수) ✅
+- auto-merge(squash) 활성화 ✅ → PR이 CI 통과 시 자동 머지됨
+- main 직접 push 차단됨 → 모든 변경은 feat/chore 브랜치 → PR → auto-merge
+- CI: `.github/workflows/skill-lint.yml` (PR/푸시 시 `npm run lint:skills`)
 
 ---
 
 ## 🔜 다음 액션 (이어서 할 일)
-1. ai-handoff 세로 슬라이스를 부트스트랩 커밋으로 main에 push.
-2. GitHub 브랜치 보호 규칙 설정 (`lint` required).
-3. README Architect 스킬을 feature 브랜치 → PR → auto-merge 로 추가 (보호 플로우 첫 검증).
+1. Requirements & Spec Writer 스킬을 feat 브랜치 → PR → auto-merge 로 추가.
+2. Final Artifact Builder 스킬 추가 → MVP 필수 4종 완성.
+3. (Phase 2) 나머지 스킬 + 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
 
 ## 🐞 이슈 / 개선 로그 (체감 테스트 중 발견)
-- (아직 없음)
+- (아직 없음 — 실제 모델로 프롬프트 돌려보며 누적 예정)
