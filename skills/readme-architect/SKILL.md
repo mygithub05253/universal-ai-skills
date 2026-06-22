@@ -1,5 +1,5 @@
 ---
-name: README Architect
+name: readme-architect
 description: Generate a portfolio-grade, ready-to-commit README.md from project info. Use when starting a project's README, polishing one for a portfolio, or documenting a project before submission.
 argument-hint: [project-name]
 ---

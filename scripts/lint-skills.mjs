@@ -109,7 +109,14 @@ for (const slug of skillDirs) {
     if (!fm) {
       err(slug, "SKILL.md 에 YAML frontmatter(--- 블록)가 없습니다.");
     } else {
-      if (!fm.name) err(slug, "SKILL.md frontmatter 에 name 이 없습니다.");
+      if (!fm.name) {
+        err(slug, "SKILL.md frontmatter 에 name 이 없습니다.");
+      } else if (fm.name !== slug) {
+        // 네이티브 스킬 표준: frontmatter name 은 폴더 slug(케밥케이스)와 동일해야 한다.
+        // 공백/대문자 제목을 넣으면 Claude Code 가 /명령어 이름을 제대로 등록하지 못한다.
+        // 사람용 제목은 metadata.json 의 name 에만 둔다.
+        err(slug, `SKILL.md frontmatter name(${fm.name}) 이 폴더 slug(${slug})와 같아야 합니다. name 은 케밥케이스 slug 여야 합니다 (사람용 제목은 metadata.json name).`);
+      }
       if (!fm.description) err(slug, "SKILL.md frontmatter 에 description 이 없습니다.");
     }
   }
