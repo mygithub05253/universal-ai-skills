@@ -1,0 +1,52 @@
+name: PR Conventions
+
+# PR 제목이 영문 Conventional Commits 형식인지, 브랜치명이 규칙을 지켰는지 검증한다.
+# 규칙이 CONTRIBUTING 문서에만 있지 않고 실제로 강제되도록 하는 게이트.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  pr-title:
+    name: pr-title
+    runs-on: ubuntu-latest
+    steps:
+      # PR 제목을 Conventional Commits 로 검증 (널리 쓰이는 표준 액션)
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            chore
+            ci
+            refactor
+            test
+            style
+            perf
+            build
+            revert
+          requireScope: false
+          subjectPattern: ^.+$
+
+  branch-name:
+    name: branch-name
+    runs-on: ubuntu-latest
+    steps:
+      - name: 브랜치명 규칙 검사
+        run: |
+          name="${{ github.head_ref }}"
+          echo "브랜치명: $name"
+          if echo "$name" | grep -qE '^(feat|fix|docs|chore|ci|refactor|test|style|perf|build|revert|hotfix|release|experiment)/[a-z0-9._-]+$'; then
+            echo "✅ 브랜치명 규칙 통과"
+          else
+            echo "❌ 브랜치명은 'type/short-desc' 형식이어야 합니다"
+            echo "   허용 타입: feat fix docs chore ci refactor test style perf build revert hotfix release experiment"
+            exit 1
+          fi

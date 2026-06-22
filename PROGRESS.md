@@ -14,6 +14,9 @@
 - **CI/머지**: 브랜치 보호 + `lint` 체크 통과 시 auto-merge. 단, 최초 골격은 부트스트랩으로 main에 직접 push.
 - **테스트**: API 키 없음 → 구조 lint 자동화 + Claude로 직접 돌려보는 체감 테스트. 발견된 이슈는 아래 "이슈/개선 로그"에 누적.
 - **우선 스킬**: MVP 필수 4종 — AI Handoff → README Architect → Requirements & Spec Writer → Final Artifact Builder.
+- **언어 정책**: 커밋/PR 제목 = 영문 Conventional Commits(국제 표준). PR 본문·이슈·코드 주석·PROGRESS = 한국어. README/CONTRIBUTING = 영문 우선 + 한국어 보조.
+- **작업 방식**: 한 번에 하나씩, 만들 때마다 사용자에게 보여주고 피드백. 스킬은 CONTRIBUTING의 "깊이 체크리스트"를 반드시 충족(얇은 스킬 금지).
+- **진행 순서 보정**: MVP 스킬 양산 전에 Git/GitHub 거버넌스(A) → PR·커밋 스킬(B) 를 먼저 처리하기로 함.
 
 ## 🧱 표준 (확정)
 - 스킬 패키지 = `SKILL.md` + `prompt.en.md` + `prompt.ko.md` + `metadata.json` + `examples/`
@@ -48,9 +51,12 @@
 ---
 
 ## 🔜 다음 액션 (이어서 할 일)
-1. Requirements & Spec Writer 스킬을 feat 브랜치 → PR → auto-merge 로 추가.
-2. Final Artifact Builder 스킬 추가 → MVP 필수 4종 완성.
-3. (Phase 2) 나머지 스킬 + 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+1. **(A) 거버넌스** — CONTRIBUTING + PR/Issue 템플릿 + CODEOWNERS + pr-conventions CI. ← 진행 중 (chore/governance)
+   - 머지 후: `pr-conventions` 의 `pr-title`/`branch-name` 체크를 브랜치 보호 required 에 추가.
+2. **(B) pr-commit-maker 스킬** — git diff → 영문 Conventional Commit + PR 본문. 깊이 체크리스트 충족.
+3. Requirements & Spec Writer 스킬 (MVP 3호) — 깊이 체크리스트 충족.
+4. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
+5. (Phase 2) 나머지 스킬 + 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
 
 ## 🐞 이슈 / 개선 로그 (체감 테스트 중 발견)
 - (아직 없음 — 실제 모델로 프롬프트 돌려보며 누적 예정)
