@@ -1,0 +1,26 @@
+name: Skill Lint
+
+# 스킬 변경 PR이 표준 구조를 지켰는지 자동 검증하는 CI 게이트.
+# 브랜치 보호 규칙에서 이 체크(lint)를 required 로 지정해 통과해야만 머지되게 한다.
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "schema/**"
+      - "scripts/**"
+      - "package.json"
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint:skills

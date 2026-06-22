@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/mygithub05253/universal-ai-skills/schema/skill-metadata.schema.json",
+  "title": "Universal AI Skill Metadata",
+  "description": "모든 스킬 패키지의 metadata.json 이 따라야 하는 표준 스키마",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "slug", "version", "status", "category", "summary", "variables", "i18n", "compatibility", "risk"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "사람이 읽는 스킬 이름",
+      "minLength": 2
+    },
+    "slug": {
+      "type": "string",
+      "description": "폴더명과 일치해야 하는 식별자 (소문자-케밥)",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic Versioning (MAJOR.MINOR.PATCH)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "description": "스킬 성숙도 단계",
+      "enum": ["draft", "beta", "stable", "deprecated"]
+    },
+    "category": {
+      "type": "string",
+      "description": "카탈로그 필터에 쓰이는 분류",
+      "enum": ["core", "docs", "collab", "agent", "data", "quality", "artifact", "spec", "orchestrator"]
+    },
+    "summary": {
+      "type": "string",
+      "description": "한 줄 요약 (카탈로그 카드에 노출)",
+      "minLength": 10,
+      "maxLength": 200
+    },
+    "variables": {
+      "type": "array",
+      "description": "프롬프트에서 사용하는 {{VARIABLE}} 목록",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "required"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "변수명 (대문자 스네이크 케이스)",
+            "pattern": "^[A-Z0-9_]+$"
+          },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" },
+          "example": { "type": "string" }
+        }
+      }
+    },
+    "i18n": {
+      "type": "array",
+      "description": "제공하는 프롬프트 언어 (prompt.<lang>.md 파일이 존재해야 함)",
+      "items": { "type": "string", "enum": ["en", "ko"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "compatibility": {
+      "type": "object",
+      "description": "모델별 호환성 등급 (수동 평가 → 추후 자동 평가)",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["excellent", "good", "needs-tweaking", "untested"]
+      }
+    },
+    "risk": {
+      "type": "string",
+      "description": "스킬이 유도하는 행동의 위험 등급",
+      "enum": ["read-only", "code-generation", "file-write", "network", "credential-sensitive"]
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "quality": {
+      "type": "object",
+      "description": "평가 지표 (선택, 자동 평가 도입 후 채움)",
+      "additionalProperties": false,
+      "properties": {
+        "json_valid_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "avg_token_saving": { "type": "number", "minimum": 0, "maximum": 1 },
+        "last_eval": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

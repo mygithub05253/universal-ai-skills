@@ -1,0 +1,18 @@
+{
+  "name": "universal-ai-skills",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "프롬프트를 코드처럼 관리하는 AI Skill 생태계 (PromptOps blueprint)",
+  "scripts": {
+    "lint:skills": "node scripts/lint-skills.mjs",
+    "test": "npm run lint:skills"
+  },
+  "keywords": ["ai", "skills", "promptops", "prompt-engineering", "claude", "open-source"],
+  "license": "MIT",
+  "author": "mygithub05253",
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

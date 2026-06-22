@@ -1,0 +1,45 @@
+{
+  "name": "AI Handoff Dashboard",
+  "slug": "ai-handoff",
+  "version": "1.0.0",
+  "status": "stable",
+  "category": "core",
+  "summary": "다른 AI 모델로 넘어갈 때 프로젝트 상태를 표준 대시보드로 압축해 문맥 단절을 막습니다.",
+  "variables": [
+    {
+      "name": "PROJECT_GOAL",
+      "required": true,
+      "description": "프로젝트의 목표 한두 문장",
+      "example": "사내 회의실 예약 웹앱 MVP를 2주 안에 배포"
+    },
+    {
+      "name": "CURRENT_ERROR_LOG",
+      "required": false,
+      "description": "현재 막혀 있는 에러 메시지나 증상",
+      "example": "예약 생성 시 500 에러 (Prisma unique constraint)"
+    },
+    {
+      "name": "DONE_ITEMS",
+      "required": true,
+      "description": "완료된 작업 목록",
+      "example": "로그인, 예약 목록 조회 API"
+    },
+    {
+      "name": "NEXT_TASKS",
+      "required": true,
+      "description": "남은 작업 목록",
+      "example": "예약 생성 버그 수정, 알림 메일 발송"
+    }
+  ],
+  "i18n": ["en", "ko"],
+  "compatibility": {
+    "claude-opus-4": "excellent",
+    "gpt-4o": "untested",
+    "gemini-1-5-pro": "untested"
+  },
+  "risk": "read-only",
+  "tags": ["handoff", "context", "engineering"],
+  "quality": {
+    "last_eval": "2026-06-22"
+  }
+}
