@@ -6,7 +6,7 @@
 
 - **프로젝트**: Universal AI Skills Toolkit (PromptOps blueprint)
 - **저장소**: https://github.com/mygithub05253/universal-ai-skills
-- **최종 업데이트**: 2026-06-22 (KST)
+- **최종 업데이트**: 2026-06-23 (KST)
 
 ---
 
@@ -62,12 +62,14 @@
 1. ✅ (A) 거버넌스 — 완료 (PR #3)
 2. ✅ (B) pr-commit-maker 스킬 — 완료 (PR #4)
 3. ✅ 네이티브 스킬 포맷 피벗 + 설치 CLI — 완료 (PR #5)
-4. **▶ 다음 세션 시작점: Requirements & Spec Writer 스킬 (MVP 3호)** — **새 네이티브 포맷**으로, **설계 대화부터** 시작.
-   - 성격: Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안을 PR 단위로 계속 갱신)
-   - 논의할 점: 변수 구조(STAKEHOLDERS/USER_STORIES/FEATURE_LIST/CONSTRAINTS 등), 출력 분할(여러 문서?), 갱신 모드, examples 2종(신규/변경)
-   - 작업 방식: 하나씩, 설계 대화 → 빌드 → PR → 보여주고 피드백
-5. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
-6. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+4. ✅ (#1 사용자 피드백) SKILL.md frontmatter name=slug 교정 + lint 규칙 + 3개 재설치 — 완료 (PR #7)
+5. ✅ (#2 사용자 피드백) **github-workflow 스킬** — Git/GitHub 라이프사이클(동기화→브랜치→커밋→푸시→PR→머지 게이트). 이중 모드(Claude 실행 / 그 외 명령 출력) + 머지 전 질문 게이트. 완료.
+6. **▶ 다음: (#3) ai-handoff HTML 대시보드** — 기존 md 출력 유지 + 자체완결 HTML 대시보드(팀원별 %·전체 프로젝트 % 진행바 시각화) 추가. 명세/체크리스트 기반 진척률 계산 규칙 설계 필요. 회의·핸드오프 겸용.
+7. (#4 계획) **Requirements & Spec Writer 스킬 (MVP 3호)** — Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안 PR 단위 갱신). 변수 구조·출력 분할·갱신 모드 설계 대화부터.
+8. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
+9. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+
+> 진행 순서(사용자 합의): #1 → #2(완료) → #3 ai-handoff HTML 대시보드 → Requirements & Spec Writer.
 
 ## 🧭 새 세션 빠른 복구 가이드
 1. 이 PROGRESS.md 를 먼저 읽는다.
