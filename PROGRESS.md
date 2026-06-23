@@ -64,12 +64,12 @@
 3. ✅ 네이티브 스킬 포맷 피벗 + 설치 CLI — 완료 (PR #5)
 4. ✅ (#1 사용자 피드백) SKILL.md frontmatter name=slug 교정 + lint 규칙 + 3개 재설치 — 완료 (PR #7)
 5. ✅ (#2 사용자 피드백) **github-workflow 스킬** — Git/GitHub 라이프사이클(동기화→브랜치→커밋→푸시→PR→머지 게이트). 이중 모드(Claude 실행 / 그 외 명령 출력) + 머지 전 질문 게이트. 완료.
-6. **▶ 다음: (#3) ai-handoff HTML 대시보드** — 기존 md 출력 유지 + 자체완결 HTML 대시보드(팀원별 %·전체 프로젝트 % 진행바 시각화) 추가. 명세/체크리스트 기반 진척률 계산 규칙 설계 필요. 회의·핸드오프 겸용.
-7. (#4 계획) **Requirements & Spec Writer 스킬 (MVP 3호)** — Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안 PR 단위 갱신). 변수 구조·출력 분할·갱신 모드 설계 대화부터.
+6. ✅ (#3 사용자 피드백) **project-dashboard 스킬** — ai-handoff 형제 스킬로 분리. 명세 기반 **가중치 진척률**(Σ(w×c)/Σw, 작업기반 100% 함정 회피) + 팀원별 진척을 단일 자체완결 HTML(Chart.js CDN 도넛 + CSS 막대 폴백)로 생성. manual / github-prs(PR 읽어 추정) 이중 소스. 회의·핸드오프 겸용. 완료.
+7. **▶ 다음: Requirements & Spec Writer 스킬 (MVP 3호)** — Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안 PR 단위 갱신). 변수 구조·출력 분할·갱신 모드 설계 대화부터. (project-dashboard의 FEATURES 입력과 연계 가능 — 스펙이 진척률 소스가 됨)
 8. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
 9. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
 
-> 진행 순서(사용자 합의): #1 → #2(완료) → #3 ai-handoff HTML 대시보드 → Requirements & Spec Writer.
+> 진행 순서(사용자 합의): #1(완료) → #2 github-workflow(완료) → #3 project-dashboard(완료) → Requirements & Spec Writer.
 
 ## 🧭 새 세션 빠른 복구 가이드
 1. 이 PROGRESS.md 를 먼저 읽는다.

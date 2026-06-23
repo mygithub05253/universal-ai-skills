@@ -1,0 +1,57 @@
+{
+  "name": "Project Dashboard",
+  "slug": "project-dashboard",
+  "version": "1.0.0",
+  "status": "stable",
+  "category": "artifact",
+  "summary": "명세 기반 가중치 진척률과 팀원별 진척을 단일 자체완결 HTML 대시보드로 생성합니다 (회의·핸드오프용).",
+  "variables": [
+    {
+      "name": "PROJECT_NAME",
+      "required": true,
+      "description": "프로젝트 이름 (대시보드 제목)",
+      "example": "회의실 예약 웹앱"
+    },
+    {
+      "name": "FEATURES",
+      "required": true,
+      "description": "명세 기능 목록. 한 줄에 '이름 | weight | completion(0-100 또는 done/wip/todo)'",
+      "example": "예약 생성 API | 3 | 100\n예약 조회/검색 | 2 | 60\n알림 메일 | 1 | todo"
+    },
+    {
+      "name": "TEAM_MEMBERS",
+      "required": false,
+      "description": "팀원 목록(개인 프로젝트면 생략). '이름 | 역할 | 담당 기능(쉼표)'",
+      "example": "홍길동 | Backend | 예약 생성 API, 알림 메일\n김영희 | Frontend | 예약 조회/검색"
+    },
+    {
+      "name": "PROGRESS_SOURCE",
+      "required": false,
+      "description": "진척 산정 소스. manual(기본) 또는 github-prs(Claude Code 전용, PR 읽어 추정)",
+      "example": "manual"
+    },
+    {
+      "name": "MILESTONE",
+      "required": false,
+      "description": "마일스톤/목표 일정",
+      "example": "MVP 2주 내 배포 (~07/07)"
+    },
+    {
+      "name": "STATUS_NOTES",
+      "required": false,
+      "description": "리스크와 다음 초점 메모",
+      "example": "알림 메일 발송 SMTP 설정 미해결. 다음 스프린트: 중복 예약 검증."
+    }
+  ],
+  "i18n": ["en", "ko"],
+  "compatibility": {
+    "claude-opus-4": "excellent",
+    "gpt-4o": "untested",
+    "gemini-1-5-pro": "untested"
+  },
+  "risk": "file-write",
+  "tags": ["dashboard", "html", "progress", "visualization", "handoff", "team", "artifact"],
+  "quality": {
+    "last_eval": "2026-06-23"
+  }
+}
