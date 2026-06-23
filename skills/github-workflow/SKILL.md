@@ -28,18 +28,21 @@ If `{{CHANGE_DESCRIPTION}}` is empty, do not guess — ask for it in one line an
 
 ### Phase 0 — Preflight & sync
 - `git status --short` — if there are **uncommitted changes**, ask whether to stash, commit, or abort before switching branches.
-- Sync the base branch (`{{BASE_BRANCH}}` or `main`):
-  `git checkout {{BASE_BRANCH}} && git pull --ff-only`
+- **Detect worktree first:** `git rev-parse --is-inside-work-tree` and check `git worktree list`. If the base branch is checked out in **another** worktree, `git checkout {{BASE_BRANCH}}` fails with `fatal: '{{BASE_BRANCH}}' is already used by worktree …`.
+  - **Worktree case:** do NOT switch the current worktree to base, and do NOT `git fetch origin {{BASE_BRANCH}}:{{BASE_BRANCH}}` — fetching into a local branch ref that is checked out elsewhere is refused (`refusing to fetch into branch … checked out at …`). Instead update only the remote-tracking ref: `git fetch origin {{BASE_BRANCH}}`, then branch from `origin/{{BASE_BRANCH}}` in Phase 1.
+  - **Normal case:** `git checkout {{BASE_BRANCH}} && git pull --ff-only`
 - Never start work directly on the base branch — that is what Phase 1 is for.
 
 ### Phase 1 — Branch
 - Derive a branch name `type/short-kebab-desc` from `{{CHANGE_TYPE}}` (or infer the type from `{{CHANGE_DESCRIPTION}}`) + a short kebab summary. Lowercase, hyphens, no spaces.
-- `git checkout -b <branch>`
+- **Normal case:** `git checkout -b <branch>` (off the freshly-pulled base).
+- **Worktree case:** branch directly off the updated remote-tracking ref so you never need base checked out locally: `git checkout -b <branch> origin/{{BASE_BRANCH}}`. (Standalone new worktree: `git worktree add <path> -b <branch> origin/{{BASE_BRANCH}}`.)
 - Allowed types: `feat fix docs chore ci refactor test style perf build revert` (branch-only: `hotfix release experiment`).
 
 ### Phase 2 — Commit (repeat as needed)
 - After the work is done, review what changed: `git status --short` then `git diff` (and `git diff --staged` after staging).
 - Stage intentionally (`git add <paths>` or `git add -A`).
+- **`.gitignore` guard:** before committing, confirm no intended file is being silently ignored. Run `git check-ignore -v <path>` on the files you expect to commit (or `git status --ignored --short` to see what is excluded). If a file you meant to include is ignored, fix `.gitignore` or `git add -f` deliberately — never let a silently-ignored path turn into an empty/partial commit.
 - Write a **Conventional Commit** message: `type(scope): subject` — imperative, lowercase first letter, no trailing period, ≤72 chars. Commit/title in English by default.
 - `git commit -m "type(scope): subject"` (add a body for the why when it is non-trivial).
 - If **unrelated changes** are mixed, split them into separate commits — one logical change each.
@@ -63,10 +66,13 @@ If `{{CHANGE_DESCRIPTION}}` is empty, do not guess — ask for it in one line an
   3. 머지 방식은? (`{{MERGE_METHOD}}` 기본 squash / merge / rebase)
   4. 지금 즉시 머지할지, auto-merge로 CI 통과 시 자동 머지할지?
   5. 머지 후 브랜치 삭제하고 base로 복귀할지?
+- **CI check count matters for `--auto`:** if `gh pr checks <#>` reports **0 checks** (no CI configured), `--auto` has nothing to wait on and resolves to an **immediate merge** the moment auto-merge is enabled. So with 0 checks, `--auto` ≈ immediate — say so explicitly and let the user pick immediate vs auto knowingly. `--auto` only meaningfully "waits" when ≥1 check exists.
 - Then merge per the answers:
   - 즉시: `gh pr merge <#> --squash --delete-branch`
   - 자동: `gh pr merge <#> --auto --squash`
-- Cleanup: `git checkout {{BASE_BRANCH}} && git pull --ff-only` (and `git branch -d <branch>` if not auto-deleted).
+- Cleanup:
+  - **Normal case:** `git checkout {{BASE_BRANCH}} && git pull --ff-only` (and `git branch -d <branch>` if not auto-deleted).
+  - **Worktree case:** if base is checked out in another worktree, do NOT `git checkout {{BASE_BRANCH}}` here — it errors with `already used by worktree`. Instead refresh the remote-tracking ref only (`git fetch origin {{BASE_BRANCH}}`) and stay on the current HEAD; let the other worktree own base. (When you next start work, branch from `origin/{{BASE_BRANCH}}` per Phase 1.)
 
 ## Prohibitions
 - ❌ Never push directly to the base branch — always go through a PR.
