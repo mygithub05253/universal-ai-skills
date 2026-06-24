@@ -1,0 +1,1381 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Universal AI Skills Toolkit MVP Prototype</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-soft: #eef2f6;
+      --text: #162033;
+      --muted: #647084;
+      --line: #d9e0ea;
+      --accent: #087f8c;
+      --accent-dark: #0b5f6c;
+      --green: #168a56;
+      --amber: #b7791f;
+      --red: #bf3f3f;
+      --blue: #335c99;
+      --shadow: 0 18px 45px rgba(22, 32, 51, 0.11);
+      --radius: 8px;
+      --sidebar: 360px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) var(--sidebar);
+    }
+
+    .main {
+      min-width: 0;
+      padding: 20px 28px 48px;
+    }
+
+    .topbar {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--text);
+      color: #fff;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .nav a {
+      color: inherit;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 7px;
+    }
+
+    .nav a:hover {
+      background: var(--surface-soft);
+      color: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.92fr) minmax(320px, 1.08fr);
+      gap: 26px;
+      align-items: stretch;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 44px;
+      line-height: 1.05;
+      margin: 0 0 16px;
+      max-width: 720px;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 0 22px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .button {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 7px;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: 0.16s ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(22, 32, 51, 0.11);
+    }
+
+    .system-map {
+      background: #182134;
+      color: #f4f7fb;
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      min-height: 250px;
+    }
+
+    .map-row {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .map-label {
+      color: #b9c4d6;
+      font-size: 12px;
+      line-height: 1.4;
+      text-transform: uppercase;
+      font-weight: 800;
+      padding-top: 10px;
+    }
+
+    .map-track {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .map-node {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 7px;
+      padding: 10px;
+      min-height: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .map-node strong {
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .map-node span {
+      color: #b9c4d6;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .search {
+      position: relative;
+    }
+
+    .search i {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      width: 18px;
+      height: 18px;
+    }
+
+    .search input {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 0 14px 0 42px;
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .chip.active {
+      color: var(--accent-dark);
+      border-color: rgba(8, 127, 140, 0.4);
+      background: #e8f6f7;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin: 18px 0 12px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pack-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 15px;
+      min-height: 222px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: 0.16s ease;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 34px rgba(22, 32, 51, 0.09);
+    }
+
+    .pack-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .pack-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: var(--surface-soft);
+      color: var(--accent-dark);
+      flex: 0 0 auto;
+    }
+
+    .pack-type {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 6px;
+      padding: 0 8px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .pack-card h3 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .pack-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    .meta-line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tool {
+      min-width: 26px;
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 6px;
+      background: #eef2f6;
+      color: #4a5870;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .tool.ok {
+      background: #e6f5ec;
+      color: var(--green);
+    }
+
+    .tool.warn {
+      background: #fff4d9;
+      color: var(--amber);
+    }
+
+    .score {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .small-link {
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .sidebar {
+      min-height: 100vh;
+      border-left: 1px solid var(--line);
+      background: var(--surface);
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stack-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stack-head h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .count {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: var(--text);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .stack-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 142px;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stack-item {
+      display: grid;
+      grid-template-columns: 30px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 8px;
+    }
+
+    .stack-item strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .stack-item span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .icon-button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+    }
+
+    .compat-panel,
+    .files-panel,
+    .warning-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+
+    .warning-panel {
+      border-color: rgba(183, 121, 31, 0.45);
+      background: #fff8e8;
+      color: #744c12;
+      font-size: 13px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .warning-panel.visible {
+      display: block;
+    }
+
+    .panel-title {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 850;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .compat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .compat {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 750;
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--line);
+    }
+
+    .status-dot.ok {
+      background: var(--green);
+    }
+
+    .status-dot.warn {
+      background: var(--amber);
+    }
+
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .file-row code {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sidebar-actions {
+      display: grid;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      width: min(900px, calc(100vw - 32px));
+      transform: translate(-50%, calc(100% + 40px));
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      z-index: 10;
+      transition: 0.22s ease;
+      overflow: hidden;
+    }
+
+    .drawer.open {
+      transform: translate(-50%, 0);
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .drawer-head h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .drawer-body {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .target-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .command-box,
+    .preview-box {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #111827;
+      color: #dbeafe;
+      padding: 14px;
+      min-height: 168px;
+      overflow: auto;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .preview-box {
+      background: #f8fafc;
+      color: #25324a;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 24, 39, 0.54);
+      display: none;
+      place-items: center;
+      padding: 18px;
+      z-index: 20;
+    }
+
+    .modal.open {
+      display: grid;
+    }
+
+    .modal-panel {
+      width: min(1020px, 100%);
+      max-height: min(760px, calc(100vh - 36px));
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .modal-head {
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-head h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 420px;
+      overflow: hidden;
+    }
+
+    .file-tabs {
+      border-right: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow: auto;
+    }
+
+    .file-tab {
+      min-height: 38px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .file-tab.active {
+      background: var(--surface);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .file-content {
+      padding: 16px;
+      overflow: auto;
+    }
+
+    .file-content pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.65;
+      color: #25324a;
+    }
+
+    .mobile-stack-toggle {
+      display: none;
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 9;
+      box-shadow: var(--shadow);
+    }
+
+    @media (max-width: 1200px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        display: block;
+      }
+
+      .main {
+        padding: 16px 16px 118px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        height: auto;
+        padding-bottom: 12px;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 34px;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        top: auto;
+        z-index: 8;
+        min-height: auto;
+        max-height: 72vh;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        transform: translateY(calc(100% + 24px));
+        transition: 0.2s ease;
+        overflow: auto;
+      }
+
+      .sidebar.open {
+        transform: translateY(0);
+      }
+
+      .mobile-stack-toggle {
+        display: inline-flex;
+        top: 16px;
+        right: 16px;
+        bottom: auto;
+      }
+
+      .drawer-body,
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .file-tabs {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        flex-direction: row;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .map-row {
+        grid-template-columns: 1fr;
+      }
+
+      .map-track {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <main class="main">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark"><i data-lucide="blocks"></i></div>
+          <span>Universal AI Skills</span>
+        </div>
+        <nav class="nav" aria-label="Primary">
+          <a href="#catalog">Skills</a>
+          <a href="#catalog">Policies</a>
+          <a href="#preview">Preview</a>
+          <a href="#docs">Docs</a>
+          <a href="https://github.com/mygithub05253/universal-ai-skills">GitHub</a>
+        </nav>
+      </header>
+
+      <section class="hero" aria-labelledby="title">
+        <div>
+          <h1 id="title">Build your AI agent rulebook in 60 seconds.</h1>
+          <p>Pick skills, add governance policies, and generate the files Claude, Codex, Gemini, Cursor, and GitHub expect. The first experience is browsing; the second is one-command setup.</p>
+          <div class="hero-actions">
+            <button class="button primary" id="startBrowse"><i data-lucide="search"></i> Browse packs</button>
+            <button class="button" id="previewFilesTop"><i data-lucide="file-search"></i> Preview generated files</button>
+          </div>
+        </div>
+        <div class="system-map" aria-label="Generated system map">
+          <div class="map-row">
+            <div class="map-label">Choose</div>
+            <div class="map-track">
+              <div class="map-node"><strong>Skills</strong><span>Reusable agent workflows</span></div>
+              <div class="map-node"><strong>Policies</strong><span>Rules agents must follow</span></div>
+              <div class="map-node"><strong>Collections</strong><span>Starter stacks for teams</span></div>
+              <div class="map-node"><strong>Targets</strong><span>Claude, Codex, Gemini</span></div>
+            </div>
+          </div>
+          <div class="map-row">
+            <div class="map-label">Generate</div>
+            <div class="map-track">
+              <div class="map-node"><strong>AGENTS.md</strong><span>Cross-agent base rules</span></div>
+              <div class="map-node"><strong>CLAUDE.md</strong><span>Claude-specific mirror</span></div>
+              <div class="map-node"><strong>GEMINI.md</strong><span>Gemini project memory</span></div>
+              <div class="map-node"><strong>GitHub CI</strong><span>Branch and PR gates</span></div>
+            </div>
+          </div>
+          <div class="map-row">
+            <div class="map-label">Install</div>
+            <div class="map-track">
+              <div class="map-node"><strong>npx command</strong><span>Copy from drawer</span></div>
+              <div class="map-node"><strong>doctor</strong><span>Verify local state</span></div>
+              <div class="map-node"><strong>share stack</strong><span>URL state for teams</span></div>
+              <div class="map-node"><strong>safe merge</strong><span>Preview before overwrite</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="catalog" aria-label="Catalog">
+        <div class="toolbar">
+          <div class="search">
+            <i data-lucide="search"></i>
+            <input id="searchInput" type="search" placeholder="Search skills, policies, tags, or tools">
+          </div>
+          <div class="filters" aria-label="Filters">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="skill">Skills</button>
+            <button class="chip" data-filter="policy">Policies</button>
+            <button class="chip" data-filter="claude">Claude</button>
+            <button class="chip" data-filter="codex">Codex</button>
+            <button class="chip" data-filter="gemini">Gemini</button>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>Featured skill and policy packs</h2>
+          <span id="resultCount">8 packs</span>
+        </div>
+        <div class="grid" id="packGrid"></div>
+      </section>
+    </main>
+
+    <aside class="sidebar" id="sidebar" aria-label="My Stack">
+      <div class="stack-head">
+        <h2>My Stack</h2>
+        <span class="count" id="stackCount">0</span>
+      </div>
+      <div class="stack-list" id="stackList">
+        <div class="empty">Add a skill or policy to generate install commands and project files.</div>
+      </div>
+      <div class="warning-panel" id="warningPanel">
+        Conflict: two selected policies define Git branch rules. Keep one governance policy in the MVP.
+      </div>
+      <div class="compat-panel">
+        <div class="panel-title">Combined compatibility</div>
+        <div class="compat-grid" id="compatGrid"></div>
+      </div>
+      <div class="files-panel">
+        <div class="panel-title">Generated files</div>
+        <div class="file-list" id="fileList"></div>
+      </div>
+      <div class="sidebar-actions">
+        <button class="button primary" id="generateInstall"><i data-lucide="terminal"></i> Generate install</button>
+        <button class="button" id="previewFiles"><i data-lucide="file-search"></i> Preview files</button>
+        <button class="button" id="shareStack"><i data-lucide="link"></i> Share stack link</button>
+      </div>
+    </aside>
+  </div>
+
+  <button class="button primary mobile-stack-toggle" id="mobileStack"><i data-lucide="layers"></i> Stack</button>
+
+  <section class="drawer" id="drawer" aria-label="Install drawer">
+    <div class="drawer-head">
+      <h2>Install your stack</h2>
+      <button class="icon-button" id="closeDrawer" aria-label="Close install drawer"><i data-lucide="x"></i></button>
+    </div>
+    <div class="drawer-body">
+      <div>
+        <div class="panel-title">Target platform</div>
+        <div class="target-tabs">
+          <button class="chip active" data-target="all">All</button>
+          <button class="chip" data-target="claude">Claude</button>
+          <button class="chip" data-target="codex">Codex</button>
+          <button class="chip" data-target="gemini">Gemini</button>
+          <button class="chip" data-target="github">GitHub</button>
+        </div>
+        <pre class="command-box" id="commandBox"></pre>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button class="button primary" id="copyCommand"><i data-lucide="copy"></i> Copy command</button>
+          <button class="button" id="drawerPreview"><i data-lucide="file-code"></i> Preview files</button>
+        </div>
+      </div>
+      <div>
+        <div class="panel-title">What will be generated</div>
+        <pre class="preview-box" id="drawerPreviewBox"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="modal" id="fileModal" aria-label="Generated files preview">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2>Generated files preview</h2>
+        <button class="icon-button" id="closeModal" aria-label="Close file preview"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="file-tabs" id="fileTabs"></div>
+        <div class="file-content">
+          <pre id="fileContent"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const packs = [
+      {
+        id: "github-collaboration",
+        type: "policy",
+        title: "GitHub Collaboration Policy",
+        summary: "Generate agent instructions and GitHub checks for branch, commit, PR, and review rules.",
+        category: "governance",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "warn" },
+        score: 94,
+        risk: "file-write",
+        files: ["AGENTS.md", "CLAUDE.md", "GEMINI.md", ".github/workflows/pr-conventions.yml"]
+      },
+      {
+        id: "agent-instructions-basic",
+        type: "policy",
+        title: "Basic Agent Instructions",
+        summary: "Create a simple cross-agent project rulebook for teams that only need shared context.",
+        category: "governance",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "warn" },
+        score: 87,
+        risk: "file-write",
+        conflictsWith: ["github-collaboration"],
+        files: ["AGENTS.md", "CLAUDE.md", "GEMINI.md"]
+      },
+      {
+        id: "github-workflow",
+        type: "skill",
+        title: "GitHub Workflow",
+        summary: "Guide safe branch creation, commits, pushes, PR creation, and merge gates.",
+        category: "collaboration",
+        tools: { claude: "ok", codex: "ok", gemini: "warn", cursor: "warn" },
+        score: 91,
+        risk: "network",
+        files: [".claude/skills/github-workflow/SKILL.md", ".codex/skills/github-workflow/SKILL.md"]
+      },
+      {
+        id: "pr-commit-maker",
+        type: "skill",
+        title: "PR & Commit Message Maker",
+        summary: "Turn diffs into Conventional Commit titles, PR bodies, and branch names.",
+        category: "collaboration",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "ok" },
+        score: 89,
+        risk: "read-only",
+        files: [".claude/skills/pr-commit-maker/SKILL.md", ".codex/skills/pr-commit-maker/SKILL.md"]
+      },
+      {
+        id: "ai-handoff",
+        type: "skill",
+        title: "AI Handoff Dashboard",
+        summary: "Compress project state so a new AI session can resume without losing context.",
+        category: "core",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "ok" },
+        score: 86,
+        risk: "read-only",
+        files: [".claude/skills/ai-handoff/SKILL.md", ".codex/skills/ai-handoff/SKILL.md"]
+      },
+      {
+        id: "readme-architect",
+        type: "skill",
+        title: "README Architect",
+        summary: "Generate portfolio-grade README structure from project context and goals.",
+        category: "docs",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "ok" },
+        score: 84,
+        risk: "read-only",
+        files: [".claude/skills/readme-architect/SKILL.md", ".codex/skills/readme-architect/SKILL.md"]
+      },
+      {
+        id: "project-dashboard",
+        type: "skill",
+        title: "Project Dashboard",
+        summary: "Build a self-contained project progress dashboard from weighted feature status.",
+        category: "reporting",
+        tools: { claude: "ok", codex: "ok", gemini: "warn", cursor: "warn" },
+        score: 82,
+        risk: "file-write",
+        files: [".claude/skills/project-dashboard/SKILL.md", ".codex/skills/project-dashboard/SKILL.md"]
+      },
+      {
+        id: "hackathon-starter",
+        type: "collection",
+        title: "Student Hackathon Starter",
+        summary: "A starter stack for fast teams: handoff, README, PR messages, and GitHub rules.",
+        category: "collection",
+        tools: { claude: "ok", codex: "ok", gemini: "ok", cursor: "warn" },
+        score: 88,
+        risk: "file-write",
+        files: ["AGENTS.md", "CLAUDE.md", "GEMINI.md", ".github/PULL_REQUEST_TEMPLATE.md"],
+        includes: ["github-collaboration", "ai-handoff", "pr-commit-maker", "readme-architect"]
+      }
+    ];
+
+    const state = {
+      filter: "all",
+      query: "",
+      stack: [],
+      target: "all",
+      activeFile: "AGENTS.md"
+    };
+
+    const files = {
+      "AGENTS.md": `# AGENTS.md
+
+## Project Rules
+- Never commit directly to main or dev.
+- Use feature branches that match the configured pattern.
+- Read CONTRIBUTING.md and .github/PULL_REQUEST_TEMPLATE.md before opening a PR.
+- Keep commit and PR titles in English Conventional Commits.
+- Write PR body content in Korean unless the project says otherwise.
+
+## Installed Skill Packs
+{{SKILLS}}
+
+## Verification
+- Run the project lint and tests before claiming completion.
+- If a generated file already exists, preview the diff before overwriting.`,
+      "CLAUDE.md": `# CLAUDE.md
+
+This file mirrors AGENTS.md for Claude Code.
+
+Claude-specific guidance:
+- Prefer project-local skills from .claude/skills.
+- Use GitHub workflow rules before branch, commit, push, or PR actions.
+- Do not merge without explicit human approval.`,
+      "GEMINI.md": `# GEMINI.md
+
+This file mirrors the cross-agent project policy for Gemini CLI.
+
+Follow AGENTS.md semantics where possible.
+If a tool-specific feature is unavailable, preserve the policy intent and explain the limitation.`,
+      ".github/workflows/pr-conventions.yml": `name: PR Conventions
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          name="\${{ github.head_ref }}"
+          if echo "$name" | grep -qE '^(feat|fix|docs|chore|ci|refactor|test|style|perf|build|revert|hotfix|release|experiment)/[a-z0-9._-]+$'; then
+            echo "branch name ok"
+          else
+            echo "invalid branch name"
+            exit 1
+          fi`
+    };
+
+    const packGrid = document.getElementById("packGrid");
+    const stackList = document.getElementById("stackList");
+    const stackCount = document.getElementById("stackCount");
+    const compatGrid = document.getElementById("compatGrid");
+    const fileList = document.getElementById("fileList");
+    const warningPanel = document.getElementById("warningPanel");
+    const resultCount = document.getElementById("resultCount");
+    const drawer = document.getElementById("drawer");
+    const commandBox = document.getElementById("commandBox");
+    const drawerPreviewBox = document.getElementById("drawerPreviewBox");
+    const fileModal = document.getElementById("fileModal");
+    const fileTabs = document.getElementById("fileTabs");
+    const fileContent = document.getElementById("fileContent");
+    const sidebar = document.getElementById("sidebar");
+
+    function iconFor(type) {
+      if (type === "policy") return "shield-check";
+      if (type === "collection") return "layers";
+      return "wrench";
+    }
+
+    function filteredPacks() {
+      return packs.filter((pack) => {
+        const query = state.query.toLowerCase();
+        const matchesQuery = !query || [pack.id, pack.title, pack.summary, pack.category, pack.type].join(" ").toLowerCase().includes(query);
+        const matchesFilter = state.filter === "all" || pack.type === state.filter || pack.tools[state.filter];
+        return matchesQuery && matchesFilter;
+      });
+    }
+
+    function renderPacks() {
+      const data = filteredPacks();
+      resultCount.textContent = `${data.length} packs`;
+      packGrid.innerHTML = data.map((pack) => {
+        const inStack = state.stack.includes(pack.id);
+        return `
+          <article class="pack-card" data-id="${pack.id}">
+            <div class="pack-top">
+              <div class="pack-icon"><i data-lucide="${iconFor(pack.type)}"></i></div>
+              <span class="pack-type">${pack.type}</span>
+            </div>
+            <h3>${pack.title}</h3>
+            <p>${pack.summary}</p>
+            <div class="meta-line">
+              ${toolBadges(pack.tools)}
+              <span class="score">trust ${pack.score}</span>
+            </div>
+            <div class="card-actions">
+              <button class="button ${inStack ? "" : "primary"}" data-add="${pack.id}">
+                <i data-lucide="${inStack ? "check" : "plus"}"></i>${inStack ? "In stack" : "Add"}
+              </button>
+              <a class="small-link" href="#preview" data-detail="${pack.id}">Details</a>
+            </div>
+          </article>
+        `;
+      }).join("");
+      refreshIcons();
+    }
+
+    function toolBadges(tools) {
+      const labels = { claude: "Cl", codex: "Cx", gemini: "Gm", cursor: "Cu" };
+      return Object.entries(labels).map(([key, label]) => `<span class="tool ${tools[key] || ""}" title="${key}">${label}</span>`).join("");
+    }
+
+    function renderStack() {
+      const selected = state.stack.map((id) => packs.find((pack) => pack.id === id)).filter(Boolean);
+      stackCount.textContent = selected.length;
+      if (!selected.length) {
+        stackList.innerHTML = `<div class="empty">Add a skill or policy to generate install commands and project files.</div>`;
+      } else {
+        stackList.innerHTML = selected.map((pack) => `
+          <div class="stack-item">
+            <div class="pack-icon"><i data-lucide="${iconFor(pack.type)}"></i></div>
+            <div><strong>${pack.title}</strong><span>${pack.type} · ${pack.risk}</span></div>
+            <button class="icon-button" data-remove="${pack.id}" aria-label="Remove ${pack.title}"><i data-lucide="x"></i></button>
+          </div>
+        `).join("");
+      }
+
+      const hasConflict = selected.some((pack) => (pack.conflictsWith || []).some((id) => state.stack.includes(id)));
+      warningPanel.classList.toggle("visible", hasConflict);
+      renderCompatibility(selected);
+      renderFiles(selected);
+      renderDrawer();
+      refreshIcons();
+    }
+
+    function renderCompatibility(selected) {
+      const tools = ["claude", "codex", "gemini", "cursor"];
+      compatGrid.innerHTML = tools.map((tool) => {
+        let status = selected.length ? "ok" : "";
+        if (selected.some((pack) => pack.tools[tool] === "warn")) status = "warn";
+        if (!selected.length) status = "";
+        return `<div class="compat"><span>${tool}</span><span class="status-dot ${status}"></span></div>`;
+      }).join("");
+    }
+
+    function selectedFiles(selected) {
+      const set = new Set();
+      selected.forEach((pack) => pack.files.forEach((file) => set.add(file)));
+      return Array.from(set);
+    }
+
+    function renderFiles(selected) {
+      const generated = selectedFiles(selected);
+      fileList.innerHTML = generated.length
+        ? generated.slice(0, 8).map((file) => `<div class="file-row"><i data-lucide="file"></i><code>${file}</code></div>`).join("")
+        : `<div class="file-row"><i data-lucide="file-question"></i><code>No files yet</code></div>`;
+    }
+
+    function renderDrawer() {
+      const ids = state.stack.length ? state.stack : ["github-collaboration"];
+      const target = state.target;
+      const stackArg = ids.join(" ");
+      const targetFlag = target === "all" ? "--target all" : `--target ${target}`;
+      commandBox.textContent = `npx universal-ai-skills add ${stackArg} ${targetFlag} --dry-run
+npx universal-ai-skills add ${stackArg} ${targetFlag}
+npx universal-ai-skills doctor`;
+
+      const selected = state.stack.map((id) => packs.find((pack) => pack.id === id)).filter(Boolean);
+      const generated = selectedFiles(selected);
+      drawerPreviewBox.textContent = generated.length
+        ? generated.map((file) => `create or merge  ${file}`).join("\n")
+        : "Select packs to preview generated files.";
+    }
+
+    function renderFileModal() {
+      const fileNames = Object.keys(files);
+      fileTabs.innerHTML = fileNames.map((file) => `
+        <button class="file-tab ${file === state.activeFile ? "active" : ""}" data-file="${file}">${file}</button>
+      `).join("");
+      const selectedSkills = state.stack.length
+        ? state.stack.map((id) => `- ${id}`).join("\n")
+        : "- github-collaboration\n- pr-commit-maker\n- github-workflow";
+      fileContent.textContent = files[state.activeFile].replace("{{SKILLS}}", selectedSkills);
+    }
+
+    function refreshIcons() {
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    document.addEventListener("click", (event) => {
+      const add = event.target.closest("[data-add]");
+      if (add) {
+        const id = add.dataset.add;
+        if (!state.stack.includes(id)) state.stack.push(id);
+        renderPacks();
+        renderStack();
+      }
+
+      const remove = event.target.closest("[data-remove]");
+      if (remove) {
+        state.stack = state.stack.filter((id) => id !== remove.dataset.remove);
+        renderPacks();
+        renderStack();
+      }
+
+      const filter = event.target.closest("[data-filter]");
+      if (filter) {
+        state.filter = filter.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((node) => node.classList.toggle("active", node === filter));
+        renderPacks();
+      }
+
+      const target = event.target.closest("[data-target]");
+      if (target) {
+        state.target = target.dataset.target;
+        document.querySelectorAll("[data-target]").forEach((node) => node.classList.toggle("active", node === target));
+        renderDrawer();
+      }
+
+      const file = event.target.closest("[data-file]");
+      if (file) {
+        state.activeFile = file.dataset.file;
+        renderFileModal();
+      }
+    });
+
+    document.getElementById("searchInput").addEventListener("input", (event) => {
+      state.query = event.target.value;
+      renderPacks();
+    });
+
+    document.getElementById("generateInstall").addEventListener("click", () => drawer.classList.add("open"));
+    document.getElementById("closeDrawer").addEventListener("click", () => drawer.classList.remove("open"));
+    document.getElementById("previewFiles").addEventListener("click", openModal);
+    document.getElementById("previewFilesTop").addEventListener("click", openModal);
+    document.getElementById("drawerPreview").addEventListener("click", openModal);
+    document.getElementById("closeModal").addEventListener("click", () => fileModal.classList.remove("open"));
+    document.getElementById("startBrowse").addEventListener("click", () => document.getElementById("catalog").scrollIntoView({ behavior: "smooth" }));
+    document.getElementById("mobileStack").addEventListener("click", () => sidebar.classList.toggle("open"));
+    document.getElementById("shareStack").addEventListener("click", async () => {
+      const url = `${location.origin}${location.pathname}?s=${state.stack.join(",")}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        document.getElementById("shareStack").innerHTML = `<i data-lucide="check"></i> Link copied`;
+        refreshIcons();
+      } catch {
+        alert(url);
+      }
+    });
+    document.getElementById("copyCommand").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(commandBox.textContent);
+      document.getElementById("copyCommand").innerHTML = `<i data-lucide="check"></i> Copied`;
+      refreshIcons();
+    });
+
+    function openModal() {
+      renderFileModal();
+      fileModal.classList.add("open");
+    }
+
+    const params = new URLSearchParams(location.search);
+    const fromUrl = params.get("s");
+    if (fromUrl) {
+      state.stack = fromUrl.split(",").filter((id) => packs.some((pack) => pack.id === id));
+    }
+
+    renderPacks();
+    renderStack();
+    renderDrawer();
+  </script>
+</body>
+</html>
