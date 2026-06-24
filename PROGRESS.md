@@ -6,7 +6,7 @@
 
 - **프로젝트**: Universal AI Skills Toolkit (PromptOps blueprint)
 - **저장소**: https://github.com/mygithub05253/universal-ai-skills
-- **최종 업데이트**: 2026-06-23 (KST)
+- **최종 업데이트**: 2026-06-24 (KST)
 
 ---
 
@@ -17,6 +17,7 @@
 - **언어 정책**: 커밋/PR 제목 = 영문 Conventional Commits(국제 표준). PR 본문·이슈·코드 주석·PROGRESS = 한국어. README/CONTRIBUTING = 영문 우선 + 한국어 보조.
 - **작업 방식**: 한 번에 하나씩, 만들 때마다 사용자에게 보여주고 피드백. 스킬은 CONTRIBUTING의 "깊이 체크리스트"를 반드시 충족(얇은 스킬 금지).
 - **진행 순서 보정**: MVP 스킬 양산 전에 Git/GitHub 거버넌스(A) → PR·커밋 스킬(B) 를 먼저 처리하기로 함.
+- **Marketplace MVP 방향**: 정적 Registry JSON + 웹 Stack Builder + 1급 CLI 설치 플로우를 목표로 함. Canonical source는 pack 폴더이고, 실제 파일 생성은 CLI가 담당하며, 기존 파일 보호는 UAS marker block과 `.uas/config.json` ownership 기록으로 처리.
 
 ## 🧱 표준 (확정)
 - 스킬 패키지 = `SKILL.md` + `prompt.en.md` + `prompt.ko.md` + `metadata.json` + `examples/`
@@ -68,6 +69,7 @@
 7. **▶ 다음: Requirements & Spec Writer 스킬 (MVP 3호)** — Living Docs(요구사항/유저스토리/기능명세/비기능/API 초안 PR 단위 갱신). 변수 구조·출력 분할·갱신 모드 설계 대화부터. (project-dashboard의 FEATURES 입력과 연계 가능 — 스펙이 진척률 소스가 됨)
 8. Final Artifact Builder 스킬 (MVP 4호) → MVP 필수 4종 완성.
 9. (Phase 2) 카탈로그용 통합 인덱스(JSON) 생성 스크립트.
+10. **Marketplace MVP 구현 전 문서화** — registry schema, policy pack, CLI command API, website data model, generated file adapter/merge 전략을 실무 spec으로 정리.
 
 > 진행 순서(사용자 합의): #1(완료) → #2 github-workflow(완료) → #3 project-dashboard(완료) → Requirements & Spec Writer.
 
